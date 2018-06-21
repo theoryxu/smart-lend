@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>智能借条区块链技术</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="./node_modules/bootstrap/dist/css/bootstrap.css" />
+    <script src="./node_modules/web3/dist/web3.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="col-sm-12 text-center">智能借条区块链技术</h1>
+        <div class="col-sm-12">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选择创建者</label>
+                    <div class="col-sm-10">
+                    <select class="form-control selectors" id="selectors"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary createLend">创建借条</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">借款金额</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control totalToPay" placeholder="请输入借款金额">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">借款日期</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control startTime" placeholder="借款日期">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">还款期限</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control lastTime" placeholder="还款期限">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">月利率</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control monthRate" placeholder="请输入月利率">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">违约金月利率</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control defaultRate" placeholder="请输入违约金月利率">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">选择借款者</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="lenders"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-primary" id="toLend">生成借条</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- <div class="col-sm-12 downBox">
+            <ul class="itemBox">
+                <li class="bs-item">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">创建者</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">选择借款者</label>
+                        <div class="col-sm-10">
+                            <select class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">借款金额</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control totalToPay" placeholder="请输入借款金额">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">借款日期</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control startTime" placeholder="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">还款期限</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control lastTime" placeholder="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">月利率</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control monthRate" placeholder="请输入月利率">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">违约金月利率</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control defaultRate" placeholder="请输入违约金月利率">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button class="btn btn-success toLend">生成借条</button>
+                        </div>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-12 alreadyBox">
+            <ul class="readyBox">
+                <li>
+                    <table class="table">
+                        <tr>
+                            <td class="fw">贷方</td>
+                            <td></td>
+                            <td class="fw">借方</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="fw">借款金额</td>
+                            <td></td>
+                            <td class="fw">借款日期</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="fw">月利率</td>
+                            <td></td>
+                            <td class="fw">违约金月利率</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="fw">还款期限</td>
+                            <td></td>
+                            <td class="fw">借条状态</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </div> -->
+    </div>
+    <script src="main.js" type="javascript"></script>
+</body>
+</html>
