@@ -19,7 +19,7 @@ contract smartLend {
 		string debitName;
 		string debitId;
 		uint monthRate;    	//月利率————万几
-		uint defaultRate;  	//违约金月利率————万
+		uint defaultRate;  	//违约金月利率————万几
 		uint totalToPay;		
 		uint capitalToPay; 	//待付本金
 		uint interestToPay;//0	//待付利息
@@ -66,7 +66,7 @@ contract smartLend {
 	//借方确认——通过点击动作或者输入accept or refuse
 	function confirmLend(string isConfirmed) returns(uint) {
 
-		require(keccak256("isConfirmed") == keccak256("accept"));
+		require(keccak256(isConfirmed) == keccak256("accept"));
 		return 1;
 
 	}
