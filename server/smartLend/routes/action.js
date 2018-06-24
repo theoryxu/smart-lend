@@ -1,48 +1,18 @@
 fs = require('fs')
 var express = require('express');
-var solc = require('solc');
 var router = express.Router();
+
+
+var deployInfo = fs.readFileSync('../deployContract/deploy.info', 'utf8').toString();
+console.log("deployInfo: " + deployInfo);
+var json = JSON.parse(deployInfo)
 
 var Web3 = require("web3");
 var web3 = new Web3();
 web3.setProvider(new Web3.providers.HttpProvider("http://localhost:8545"));
-//var abi = [];
-//var address = "";
-//var smartLend = web3.eth.contract(abi).at(address);
-
-var source = fs.readFileSync('../../smartLend.sol', 'utf8').toString();
-var output = solc.compile(source, 1);
-
-const bytecode = output.contracts[':smartLend'].bytecode;
-const abi = JSON.parse(output.contracts[':smartLend'].interface);
-
-var smartLend;
-var accos;
-web3.eth.getAccounts(function(error, accounts) {
-
-    var contract = new web3.eth.Contract(abi);
-    accos = accounts;
-    console.log("create smartLend from accounts[0]: " + accounts[0])
-
-    contract.deploy({data: '0x' + bytecode}).send({
-        from: accounts[0],
-        gas: 1500000,
-        gasPrice: '30000000000000'
-    }, function(error, transactionHash) {
-        if(error){
-            console.log("error: " + error)
-        }
-    })
-    .on('transactionHash', function(transactionHash){ 
-        console.log("transactionHash: " + transactionHash)
-    })
-    .then(function(newContractInstance){
-        smartLend = newContractInstance;
-        console.log("newContractInstance.options.address: " + newContractInstance.options.address) // instance with the new contract address
-    });
-
-});
-
+var abi = json.abi;
+var address = json.address;
+var smartLend = new web3.eth.Contract(abi, address);
 
 
 /* GET action page. */
