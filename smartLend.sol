@@ -19,7 +19,7 @@ contract smartLend {
 		string debitName;
 		string debitId;
 		uint monthRate;    	//月利率————万几
-		uint defaultRate;  	//违约金月利率————万
+		uint defaultRate;  	//违约金月利率————万几
 		uint totalToPay;		
 		uint capitalToPay; 	//待付本金
 		uint interestToPay;//0	//待付利息
