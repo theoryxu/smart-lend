@@ -66,7 +66,7 @@ contract smartLend {
 	//借方确认——通过点击动作或者输入accept or refuse
 	function confirmLend(string isConfirmed) returns(uint) {
 
-		require(keccak256("isConfirmed") == keccak256("accept"));
+		require(keccak256(isConfirmed) == keccak256("accept"));
 		return 1;
 
 	}
