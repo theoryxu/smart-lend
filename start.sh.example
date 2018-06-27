@@ -1,0 +1,23 @@
+#!/bin/bash
+
+rm -rf smart-lend
+
+mkdir logs
+
+git clone https://github.com/theoryxu/smart-lend.git
+
+ganache-cli >> logs/test_chain.log &
+
+cd smart-lend/server/deployContract/
+
+npm install
+
+npm start
+
+cd ../smartLend/
+
+npm install
+
+npm start >> ../../../logs/server.log &
+
+cd ../../../

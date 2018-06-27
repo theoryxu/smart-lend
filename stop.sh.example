@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+chain_pid=$(lsof -i tcp:8545 | grep 8545 | awk '{print $2}')
+
+echo $chain_pid
+
+server_pid=$(lsof -i tcp:3000 | grep 3000 | awk '{print $2}')
+
+echo $server_pid
+
+kill $chain_pid
+
+kill $server_pid
+
+rm -rf smart-lend logs
