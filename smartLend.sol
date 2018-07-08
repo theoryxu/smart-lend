@@ -22,10 +22,11 @@ contract smartLend {
 		uint defaultRate;  	//违约金月利率————万几
 		uint totalToPay;		
 		uint capitalToPay; 	//待付本金
-		uint interestToPay;//0	//待付利息
+		uint interestToPay; //0	//待付利息
 		uint startTime; 
 		uint dueTime;   
 		uint lastTime; //startTime
+		bool isConfirmed;
 		bool isClosed; //0
 	} 
 
@@ -38,8 +39,8 @@ contract smartLend {
 
 	mapping (uint=>Address) lendToOwner;
 
-	mapping (address=>Lend[]) creditOfLend; // 地址对应的借入款借条信息 creditOfLend[address] = [Lend(1), Lend(2),...]
-	mapping (address=>Lend[]) debitOfLend;  // 地址对应的借出款借条信息
+	//mapping (address=>Lend[]) creditOfLend; // 地址对应的借入款借条信息 creditOfLend[address] = [Lend(1), Lend(2),...]
+	//mapping (address=>Lend[]) debitOfLend;  // 地址对应的借出款借条信息
 	//mapping (Lend=>Address) public lendAdress;     // 每个借条对应的借款人和贷款人
 	mapping (address=>uint) balances;       // 账户余额 balances[address] = uint;
 	mapping (address=>uint) creditScore;	   // 每个账户的信用积分
@@ -48,25 +49,53 @@ contract smartLend {
 	
 	Lend newLend;
 	Lend toPay;
-
+    
 	//创建借条 前端将时间戳转化为字符串
-	function creatLend(address to,string isConfirmed, string creditName, string creditId, string debitName, string debitId, uint monthRate, uint defaultRate, uint totalToPay, uint startTime, uint dueTime) {
+	function creatLend(address to, string creditName, string creditId, string debitName, string debitId, uint monthRate, uint defaultRate, uint totalToPay, uint startTime, uint dueTime) {
 
-		newLend = Lend(creditName, creditId, debitName, debitId, monthRate, defaultRate, totalToPay, totalToPay, 0, startTime, dueTime, startTime, false);
+		newLend = Lend(creditName, creditId, debitName, debitId, monthRate, defaultRate, totalToPay, totalToPay, 0, startTime, dueTime, startTime, false, false);
 
 		uint id = lends.push(newLend)-1;
 		lendToOwner[id] = Address(msg.sender, to);
 
-		require(confirmLend(isConfirmed)==1);
+		//require(confirmLend(isConfirmed)==1);
 
-		debitOfLend[to].push(newLend);
-		creditOfLend[msg.sender].push(newLend);
+		//debitOfLend[to].push(newLend);
+		//creditOfLend[msg.sender].push(newLend);
+	}
+
+	function checkUncomfirmed() returns(uint) {
+
+		for (uint i; i < lends.length;i++) {
+
+			if (lendToOwner[i].debit == msg.sender) {
+
+				checkLend(i);
+				return i;
+			}
+
+		}
+
+
+
 	}
 
 	//借方确认——通过点击动作或者输入accept or refuse
 	function confirmLend(string isConfirmed) returns(uint) {
+        
+		for (uint i; i < lends.length;i++) {
 
-		require(keccak256(isConfirmed) == keccak256("accept"));
+			if (lendToOwner[i].debit == msg.sender) {
+
+				checkLend(i);
+			    break;
+			}
+
+		}
+
+
+		require(keccak256(isConfirmed) == keccak256("y"));
+		lends[i].isConfirmed = true;
 		return 1;
 
 	}
