@@ -49,17 +49,17 @@ class Employer extends Component {
         const {salary, lastPaidDate, balance} = this.state;
 
         if (!salary || salary === '0') {
-            return <Alert message="你不是员工" type="error" showIcon/>;
+            return <Alert message="你不是借款人" type="error" showIcon/>;
         }
 
         return (
             <div>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Card title="薪水">{salary} Ether</Card>
+                        <Card title="借款金额">{salary} Ether</Card>
                     </Col>
                     <Col span={8}>
-                        <Card title="上次支付">{lastPaidDate}</Card>
+                        <Card title="上次支出">{lastPaidDate}</Card>
                     </Col>
                     <Col span={8}>
                         <Card title="帐号金额">{balance} Ether</Card>
@@ -71,7 +71,7 @@ class Employer extends Component {
                     icon="bank"
                     onClick={this.getPaid}
                 >
-                    获得酬劳
+                    获得利息
                 </Button>
             </div>
         );

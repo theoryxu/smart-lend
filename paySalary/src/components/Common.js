@@ -38,6 +38,7 @@ class Common extends Component {
     payroll.getEmployerInfo.call({
       from: account,
     }).then((result) => {
+      console.log(result); //返回通用信息列表的内容
       this.setState({
         balance: web3.fromWei(result[0].toNumber()),
         runway: result[1].toNumber(),
@@ -50,16 +51,16 @@ class Common extends Component {
     const { runway, balance, employeeCount } = this.state;
     return (
       <div>
-        <h2>通用信息</h2>
+        <h2>合约概况</h2>
         <Row gutter={16}>
           <Col span={8}>
-            <Card title="合约金额">{balance} Ether</Card>
+            <Card title="借款总金额">{balance} Ether</Card>
           </Col>
           <Col span={8}>
-            <Card title="员工人数">{employeeCount}</Card>
+            <Card title="借款人数">{employeeCount}</Card>
           </Col>
           <Col span={8}>
-            <Card title="可支付次数">{runway}</Card>
+            <Card title="可出资次数">{runway}</Card>
           </Col>
         </Row>
       </div>

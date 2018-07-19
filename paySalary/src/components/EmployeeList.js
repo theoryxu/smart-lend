@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Table, Button, Modal, Form, InputNumber, Input, message, Popconfirm} from 'antd';
+import {Table, Button, Modal, Form, InputNumber, DatePicker, Input, message, Popconfirm} from 'antd';
 
 import EditableCell from './EditableCell';
 
@@ -10,13 +10,25 @@ const columns = [{
     dataIndex: 'address',
     key: 'address',
 }, {
-    title: '薪水',
+    title: '借款金额',
     dataIndex: 'salary',
     key: 'salary',
 }, {
-    title: '上次支付',
+    title: '借款时间',
     dataIndex: 'lastPayday',
     key: 'lastPayday',
+}, {
+    title: '借款期限',
+    dataIndex: 'time',
+    key: 'time',
+}, {
+    title: '利率',
+    dataIndex: 'rate',
+    key: 'rate',
+}, {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
 }, {
     title: '操作',
     dataIndex: '',
@@ -30,6 +42,8 @@ class EmployeeList extends Component {
         this.state = {
             address: '',
             salary: 0,
+            time:'',
+            rate:'',
             loading: true,
             employees: [],
             showModal: false
@@ -77,7 +91,10 @@ class EmployeeList extends Component {
                     address: value[0],
                     salary: web3.fromWei(value[1].toNumber()),
                     lastPayday: new Date(value[2].toNumber() * 1000).toString(),
+                    time:'',
+                    rate:'',
                 }));
+                console.log(values);    //加载借条信息列表
                 this.setState({
                     employees: employees,
                     loading: false,
@@ -97,10 +114,16 @@ class EmployeeList extends Component {
                 salary,
                 key: address,
                 lastPayday: new Date().toString(),
+                time,
+                rate,
+                status
             }
             this.setState({
                 address: '',
                 salary: '',
+                lastPayday:'',
+                time:'',
+                rate:'',
                 showModal: false,
                 employees: employees.concat([newEmployee]),
             });
@@ -138,6 +161,9 @@ class EmployeeList extends Component {
             this.setState({
                 address: '',
                 salary: '',
+                lastPayday:'',
+                time:'',
+                rate:'',
                 showModal: false,
                 employees: employees.filter((employee) => employee.address !== employeeId)
             });
@@ -149,7 +175,7 @@ class EmployeeList extends Component {
     renderModal() {
         return (
             <Modal
-                title="增加员工"
+                title="新增借条"
                 visible={this.state.showModal}
                 onOk={this.addEmployee}
                 onCancel={() => this.setState({showModal: false})}
@@ -161,12 +187,29 @@ class EmployeeList extends Component {
                         />
                     </FormItem>
 
-                    <FormItem label="薪水">
+                    <FormItem label="借款金额">
                         <InputNumber
                             min={1}
                             onChange={salary => this.setState({salary})}
                         />
                     </FormItem>
+
+                    <FormItem label="借款时间">
+                        <DatePicker onChange={lastPayday => this.setState({lastPayday})} />
+                    </FormItem>
+
+                    <FormItem label="借款期限">
+                        <Input
+                            onChange={time => this.setState({time})}
+                        />
+                    </FormItem>
+
+                    <FormItem label="利率">
+                        <Input
+                            onChange={rate => this.setState({rate})}
+                        />
+                    </FormItem>
+                    
                 </Form>
             </Modal>
         );
@@ -180,7 +223,7 @@ class EmployeeList extends Component {
                     type="primary"
                     onClick={() => this.setState({showModal: true})}
                 >
-                    增加员工
+                    增加借条
                 </Button>
 
                 {this.renderModal()}
