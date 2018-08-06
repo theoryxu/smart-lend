@@ -59,8 +59,8 @@ class Employer extends Component {
             style={{ height: '100%' }}
             onSelect={this.onSelectTab}
           >
-            <Menu.Item key="fund">合约信息概况</Menu.Item>
-            <Menu.Item key="employees">借条信息列表</Menu.Item>
+            <Menu.Item key="fund">我借他人（作为借款方）</Menu.Item>
+            <Menu.Item key="employees">他人借我（作为出资方）</Menu.Item>
           </Menu>
         </Sider>
         <Content style={{ padding: '0 24px', minHeight: 280 }}>

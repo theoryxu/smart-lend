@@ -6,10 +6,6 @@ import EditableCell from './EditableCell';
 const FormItem = Form.Item;
 
 const columns = [{
-    title: '地址',
-    dataIndex: 'address',
-    key: 'address',
-}, {
     title: '借款金额',
     dataIndex: 'salary',
     key: 'salary',
@@ -40,23 +36,19 @@ class EmployeeList extends Component {
         super(props);
 
         this.state = {
-            address: '',
-            salary: 0,
-            time:'',
-            rate:'',
             loading: true,
             employees: [],
             showModal: false
         };
 
-        columns[1].render = (text, record) => (
-            <EditableCell
-                value={text}
-                onChange={this.updateEmployee.bind(this, record.address)}
-            />
-        );
+        // columns[1].render = (text, record) => (
+        //     <EditableCell
+        //         value={text}
+        //         onChange={this.updateEmployee.bind(this, record.address)}
+        //     />
+        // );
 
-        columns[3].render = (text, record) => (
+        columns[6].render = (text, record) => (
             <Popconfirm title="你确定删除吗?" onConfirm={() => this.removeEmployee(record.address)}>
                 <a href="#">Delete</a>
             </Popconfirm>
@@ -86,15 +78,17 @@ class EmployeeList extends Component {
         }
         Promise.all(requests)
             .then(values => {
+
+                console.log(values);    //加载借条信息列表
+
                 const employees = values.map(value => ({
                     key: value[0],
-                    address: value[0],
                     salary: web3.fromWei(value[1].toNumber()),
                     lastPayday: new Date(value[2].toNumber() * 1000).toString(),
-                    time:'',
-                    rate:'',
+                    time:value[3],
+                    rate:value[4],
+                    status:value[5],
                 }));
-                console.log(values);    //加载借条信息列表
                 this.setState({
                     employees: employees,
                     loading: false,
@@ -113,43 +107,37 @@ class EmployeeList extends Component {
                 address,
                 salary,
                 key: address,
-                lastPayday: new Date().toString(),
+                lastPayday,
                 time,
-                rate,
-                status
+                rate
             }
             this.setState({
-                address: '',
-                salary: '',
-                lastPayday:'',
-                time:'',
-                rate:'',
                 showModal: false,
                 employees: employees.concat([newEmployee]),
             });
         });
     }
 
-    updateEmployee = (address, salary) => {
-        const { payroll, account } = this.props;
-        const { employees } = this.state;
-        payroll.updateEmployee(address, salary, {
-            from: account,
-            gas: 1000000,
-        }).then((ret) => {
-            console.log(ret);
-            this.setState({
-                employees: employees.map((employee) => {
-                    if (employee.address === address) {
-                        employee.salary = salary;
-                    }
-                    return employee;
-                })
-            });
-        }).catch((error) => {
-            message.error(error.message);
-        });
-    }
+    // updateEmployee = (address, salary) => {
+    //     const { payroll, account } = this.props;
+    //     const { employees } = this.state;
+    //     payroll.updateEmployee(address, salary, {
+    //         from: account,
+    //         gas: 1000000,
+    //     }).then((ret) => {
+    //         console.log(ret);
+    //         this.setState({
+    //             employees: employees.map((employee) => {
+    //                 if (employee.address === address) {
+    //                     employee.salary = salary;
+    //                 }
+    //                 return employee;
+    //             })
+    //         });
+    //     }).catch((error) => {
+    //         message.error(error.message);
+    //     });
+    // }
 
     removeEmployee = (employeeId) => {
         const { payroll, account } = this.props;
@@ -159,11 +147,6 @@ class EmployeeList extends Component {
             gas: 1000000,
         }).then(() => {
             this.setState({
-                address: '',
-                salary: '',
-                lastPayday:'',
-                time:'',
-                rate:'',
                 showModal: false,
                 employees: employees.filter((employee) => employee.address !== employeeId)
             });

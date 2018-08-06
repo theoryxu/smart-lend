@@ -9,10 +9,23 @@ class Employer extends Component {
         payroll.getEmployeeInfoById.call(account, {
             from: account
         }).then((ret) => {
+            //  返回一个借条的详情信息
+            console.log(ret);
             const info = {
-                salary: web3.fromWei(ret[0].toNumber()),
-                lastPaidDate: new Date(ret[1].toNumber() * 1000).toString(),
-                balance: web3.fromWei(ret[2].toNumber()),
+                address: ret[0],
+                creditName: ret[1],
+                debitName: ret[2],
+                salary: ret[3],
+                dueTime: ret[4],
+                monthRate: ret[5],
+                defaultRate: ret[6],
+                defaultRate: ret[7],
+                totalToPay:ret[8],
+                capitalToPay:ret[9]
+                startTime:ret[10]
+                lastTime:ret[11]
+                isConfirmed:ret[12]
+                isClosed:ret[13]
             }
             this.setState(info);
         }).catch((error) => {
@@ -56,13 +69,43 @@ class Employer extends Component {
             <div>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Card title="借款金额">{salary} Ether</Card>
+                        <Card title="借条地址">{address} </Card>
                     </Col>
                     <Col span={8}>
-                        <Card title="上次支出">{lastPaidDate}</Card>
+                        <Card title="出资地址">{creditName} </Card>
                     </Col>
                     <Col span={8}>
-                        <Card title="帐号金额">{balance} Ether</Card>
+                        <Card title="借款地址">{debitName} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="借款金额">{salary} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="贷款时长">{dueTime} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="月利率">{monthRate} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="违约金利率">{defaultRate} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="共偿要还金额">{totalToPay} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="代付本金">{capitalToPay} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="开始时间">{startTime} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="借条终止时间">{lastTime} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="是否确认">{isConfirmed} </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card title="是否关闭">{isClosed} </Card>
                     </Col>
                 </Row>
 
@@ -71,7 +114,7 @@ class Employer extends Component {
                     icon="bank"
                     onClick={this.getPaid}
                 >
-                    获得利息
+                    还款
                 </Button>
             </div>
         );
